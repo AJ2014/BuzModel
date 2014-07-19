@@ -8,6 +8,7 @@ import com.example.buzmodel.model.TBuz;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -22,6 +23,8 @@ public class BuzTextView extends TextView implements IDBUpdateCallback {
 			buzIndex = arr.getInteger(R.styleable.TBuz_index, -1);
 			arr.recycle();
 		}
+		setBackgroundResource(R.drawable.shape_rect_bg);
+		setTextColor(Color.parseColor("#FFFFFF"));
 	}
 
 	@Override

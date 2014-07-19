@@ -23,6 +23,7 @@ public class BuzImageView extends ImageView implements IDBUpdateCallback {
 			buzIndex = arr.getInteger(R.styleable.TBuz_index, -1);
 			arr.recycle();
 		}
+		setImageResource(R.drawable.shape_ring_normal);
 		setScaleType(ScaleType.CENTER_CROP);
 	}
 	

@@ -4,4 +4,6 @@
     <color name="ring_normal">#00FF00</color>
     <color name="ring_warn">#FFFF00</color>
     <color name="ring_error">#FF0000</color>
+    <color name="rect_bg">#000000</color>
+    <color name="rect_stroke">#FFFFFF</color>
 </resources>
