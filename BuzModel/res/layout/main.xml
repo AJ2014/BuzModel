@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tbuz="http://schemas.android.com/apk/res/com.example.buzmodel"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     
-    <com.example.buzmodel.view.BuzImageView 
+    <!-- <com.example.buzmodel.view.BuzImageView 
         android:id="@+id/img_buz"
         android:layout_width="100dip"
         android:layout_height="100dip"
@@ -19,31 +19,11 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/img_buz"
         android:layout_marginTop="10dip"
-        tbuz:index="0"/>
+        tbuz:index="0"/> -->
     
-    <ImageView 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/main"/>
+    <com.example.buzmodel.view.map.view.HighlightImageView
+        android:id="@+id/himg_buz"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="29dp"
-        android:layout_height="wrap_content"
-        android:layout_x="114dp"
-        android:layout_y="46dp"
-        android:background="#FF0000"
-        android:text="Text"
-        android:textSize="6dip" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_x="62dp"
-        android:layout_y="110dp"
-        android:background="#FF0000"
-        android:text="Text"
-        android:textSize="6dip" />
-
-</AbsoluteLayout>
+</LinearLayout>

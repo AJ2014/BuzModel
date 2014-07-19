@@ -5,10 +5,10 @@ import android.graphics.PointF;
 
 public class RectShape extends Shape{
 
-    private float left;
-    private float top;
-    private float bottom;
-    private float right;
+    protected float left;
+    protected float top;
+    protected float bottom;
+    protected float right;
 
     public RectShape(Object tag, int coverColor) {
         super(tag, coverColor);
