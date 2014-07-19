@@ -3,6 +3,8 @@ package com.example.buzmodel;
 import com.example.buzmodel.view.BuzImageView;
 import com.example.buzmodel.view.BuzTextView;
 import com.example.buzmodel.view.map.lib.CircleShape;
+import com.example.buzmodel.view.map.lib.Shape;
+import com.example.buzmodel.view.map.lib.ShapeExtension.OnShapeActionListener;
 import com.example.buzmodel.view.map.lib.TextShape;
 import com.example.buzmodel.view.map.view.HighlightImageView;
 
@@ -12,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -44,10 +47,20 @@ public class MainActivity extends Activity {
 
 		mHImg.addShape(shape);
 		mHImg.addShape(tShape);
+		mHImg.setOnShapeClickListener(new OnShapeActionListener() {
+			@Override
+			public void onShapeClick(Shape shape, float xOnImage, float yOnImage) {
+				if ("Tag".equals(shape.tag)) {
+					Toast.makeText(getApplicationContext(), "åœ†å½¢è¢«ç‚¹å‡»", Toast.LENGTH_SHORT).show();
+				} else if ("tag1".equals(shape.tag)) {
+					Toast.makeText(getApplicationContext(), "çŸ©å½¢è¢«ç‚¹å‡»", Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
 	}
 	
 	 /** 
-     * ¸ù¾ÝÊÖ»úµÄ·Ö±æÂÊ´Ó dp µÄµ¥Î» ×ª³ÉÎª px(ÏñËØ) 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ä·Ö±ï¿½ï¿½Ê´ï¿½ dp ï¿½Äµï¿½Î» ×ªï¿½ï¿½Îª px(ï¿½ï¿½ï¿½ï¿½) 
      */  
     public int dip2px(Context context, float dpValue) {  
         final float scale = context.getResources().getDisplayMetrics().density;  
@@ -55,7 +68,7 @@ public class MainActivity extends Activity {
     }  
   
     /** 
-     * ¸ù¾ÝÊÖ»úµÄ·Ö±æÂÊ´Ó px(ÏñËØ) µÄµ¥Î» ×ª³ÉÎª dp 
+     * ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ä·Ö±ï¿½ï¿½Ê´ï¿½ px(ï¿½ï¿½ï¿½ï¿½) ï¿½Äµï¿½Î» ×ªï¿½ï¿½Îª dp 
      */  
     public int px2dip(Context context, float pxValue) {  
         final float scale = context.getResources().getDisplayMetrics().density;  
