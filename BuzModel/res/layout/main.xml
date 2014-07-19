@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tbuz="http://schemas.android.com/apk/res/com.example.buzmodel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000" >
+    
+    <com.example.buzmodel.view.BuzImageView 
+        android:id="@+id/img_buz"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_centerInParent="true"
+        android:src="@drawable/shape_ring_normal"
+        tbuz:index="0"/>
+    
+    <com.example.buzmodel.view.BuzTextView 
+        android:id="@+id/tv_buz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/img_buz"
+        android:layout_marginTop="10dip"
+        tbuz:index="0"/>
+
+</RelativeLayout>
