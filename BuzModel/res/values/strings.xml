@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="app_name">BuzModel</string>
+
+    
+    <string name="db_name">buz.db</string>
+    <string name="tb_name">tb_buz</string>
+    <string name="check_tb_exist">
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?"
+    </string>
+    <string name="sql_create_tb_name">
+        "CREATE TABLE tb_buz (
+		    _id     INTEGER PRIMARY KEY AUTOINCREMENT,
+		    cid     INTEGER, 
+		    name    VARCHAR,
+		    value   FLOAT,
+		    quality INTEGER,
+		    unit    INTEGER,
+		    utime   TIMESTAMP NOT NULL DEFAULT(datetime('now','localtime'))
+		)"
+    </string>
+</resources>
