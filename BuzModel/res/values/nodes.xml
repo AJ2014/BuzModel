@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="circle_0">
+        <item>118.5</item>
+        <item>53</item>
+    </string-array>
+    <string-array name="rect_0">
+        <item>137.8</item>
+        <item>43.1</item>
+        <item>172.5</item>
+        <item>51.8</item>
+    </string-array>
+</resources>
