@@ -1,17 +1,18 @@
 package com.example.buzmodel.view.map.lib;
 
 import android.graphics.*;
+import android.view.View;
 
 public abstract class Shape {
 
-	public final int color;
+	public int color;
+    protected int strokeColor;
+    protected int strokeWidth = 1;
 	public final Object tag;
-
-    protected Bubble displayBubble;
 	protected int alaph = 255;
 	protected final Paint drawPaint;
-
     protected final static Paint cleanPaint;
+    protected View container;
 
     static {
         cleanPaint = new Paint();
@@ -21,6 +22,7 @@ public abstract class Shape {
 	public Shape(Object tag, int coverColor){
 		this.tag = tag;
 		this.color = coverColor;
+        strokeColor = Color.WHITE;
 
 		drawPaint = new Paint();
 		drawPaint.setColor(coverColor);
@@ -30,17 +32,20 @@ public abstract class Shape {
 
     }
 
+    public void setColor(int color) {
+        this.color = color;
+        if (null != container) {
+            container.invalidate();
+        }
+    }
+
+    public void setContainer(View view) {
+        this.container = view;
+    }
+
 	public void setAlaph(int alaph){
 		this.alaph = alaph;
 	}
-
-    public void createBubbleRelation(Bubble displayBubble) {
-        this.displayBubble = displayBubble;
-    }
-
-    public void cleanBubbleRelation(){
-        this.displayBubble = null;
-    }
 
     public abstract void setValues(float...coords);
 
@@ -60,41 +65,31 @@ public abstract class Shape {
 
     /**
      * 由HightlightImageView调度
-     * @param scale 缩放�?
+     * @param scale 缩放�?
      * @param centerX 缩放中心 x
      * @param centerY 缩放中心 y
      */
     public final void onScale(float scale,float centerX,float centerY){
         scaleBy(scale, centerX, centerY);
-        if(displayBubble != null){
-            displayBubble.showAtShape(this);
-        }
     }
 
 	public abstract void onScale(float scale);
 
     /**
      * 由HightlightImageView调度
-     * @param deltaX 移动�? x
-     * @param deltaY 移动�? y
+     * @param deltaX 移动�? x
+     * @param deltaY 移动�? y
      */
     public final void onTranslate(float deltaX,float deltaY){
 		translate(deltaX,deltaY);
-        if(displayBubble != null){
-            displayBubble.showAtShape(this);
-        }
     }
 
     /**
-     * 由HightlightImageView调度�?
+     * 由HightlightImageView调度�?
      * @param canvas 绘制画布
      */
     public final void onDraw(Canvas canvas){
         draw(canvas);
-        // 如果当前Shape与Bubble有关联，则将Bubble也显示出�?
-        if(displayBubble != null){
-			displayBubble.showAtShape(this);
-        }
     }
 
     public abstract void draw(Canvas canvas);

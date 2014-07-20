@@ -1,7 +1,5 @@
 package com.example.buzmodel.cache;
 
-import java.io.File;
-
 import com.example.buzmodel.R;
 
 import android.content.Context;
@@ -13,7 +11,7 @@ import android.os.Build;
 /**
  * 
  * @author junjiang2
- * Êý¾Ý¿â²Ù×÷Àà
+ * ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  */
 public class HBuzDBHelper {
 	
@@ -38,9 +36,9 @@ public class HBuzDBHelper {
 	}
 	
 	/**
-	 * ³õÊ¼»¯:
-	 * 1¡¢´ò¿ª»ò´´½¨Êý¾Ý¿â
-	 * 2¡¢Èô±í²»´æÔÚÔò´´½¨±í
+	 * ï¿½ï¿½Ê¼ï¿½ï¿½:
+	 * 1ï¿½ï¿½ï¿½ò¿ª»ò´´½ï¿½ï¿½ï¿½Ý¿ï¿½
+	 * 2ï¿½ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ò´´½ï¿½ï¿½ï¿½
 	 */
 	private void setup() {
 		try {
@@ -54,7 +52,7 @@ public class HBuzDBHelper {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO ¸ø¿ØÖÆ²ã·¢Òì³£ÏûÏ¢
+			// TODO ï¿½ï¿½ï¿½ï¿½Æ²ã·¢ï¿½ì³£ï¿½ï¿½Ï¢
 		}
 	}
 	

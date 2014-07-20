@@ -42,12 +42,15 @@ public class CircleShape extends Shape {
 	@Override
 	public void draw(Canvas canvas) {
 		drawPaint.setAlpha(alaph);
+        drawPaint.setColor(strokeColor);
+        canvas.drawCircle(center.x, center.y, radius + strokeWidth, drawPaint);
+        drawPaint.setColor(color);
 		canvas.drawCircle(center.x, center.y, radius, drawPaint);
 	}
 
 	@Override
 	public void scaleBy (float scale, float centerX, float centerY) {
-        PointF newCenter = ScaleUtility.scaleByPoint(center.x, center.y, centerX, centerY, scale);
+        PointF newCenter = Utility.scaleByPoint(center.x, center.y, centerX, centerY, scale);
         radius *= scale;
         center.set(newCenter.x,newCenter.y);
 	}

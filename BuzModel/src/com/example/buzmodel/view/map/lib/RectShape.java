@@ -40,17 +40,24 @@ public class RectShape extends Shape{
 	@Override
     public void draw(Canvas canvas) {
         drawPaint.setAlpha(alaph);
+        // draw stroke
+        drawPaint.setColor(strokeColor);
+        canvas.drawRect(left - strokeWidth,
+                top - strokeWidth, right + strokeWidth,
+                bottom + strokeWidth, drawPaint);
+        drawPaint.setColor(color);
         canvas.drawRect(left,top,right,bottom,drawPaint);
+
     }
 
     @Override
     public void scaleBy (float scale, float centerX, float centerY) {
 
-        PointF leftTop = ScaleUtility.scaleByPoint(left, top, centerX, centerY, scale);
+        PointF leftTop = Utility.scaleByPoint(left, top, centerX, centerY, scale);
         left = leftTop.x;
         top = leftTop.y;
 
-        PointF righBottom = ScaleUtility.scaleByPoint(right,bottom,centerX,centerY,scale);
+        PointF righBottom = Utility.scaleByPoint(right, bottom, centerX, centerY, scale);
         right = righBottom.x;
         bottom = righBottom.y;
     }

@@ -3,33 +3,25 @@ package com.example.buzmodel.model;
 /**
  * 
  * @author junjiang2
- * ¼ÆÁ¿µ¥Î»
+ * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»
  */
 public enum EBuzUnit {
 
-	DEGREE(0, "C"), 	// ÎÂ¶È(ÉãÊÏ¶È)
-	PASCAL(1, "Pa"), 	// Ñ¹Á¦(ÅÁË¹¿¨)
-	VOLT(2, "V"), 		// µçÑ¹(·üÌØ)
-	AMPERE(3, "A"); 	// µçÁ÷(°²Åà)
-	
-	private int index;
-	private String flag;
+	DEGREE(0, "C"), 	// ï¿½Â¶ï¿½(ï¿½ï¿½ï¿½Ï¶ï¿½)
+	PASCAL(1, "Pa"), 	// Ñ¹ï¿½ï¿½(ï¿½ï¿½Ë¹ï¿½ï¿½)
+	VOLT(2, "V"), 		// ï¿½ï¿½Ñ¹(ï¿½ï¿½ï¿½ï¿½)
+	AMPERE(3, "A"); 	// ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
+
+    public int index;
+    public String flag;
 	private EBuzUnit(int index, String name) {
 		this.index = index;
 		this.flag = name;
 	}
 	
-	public String getFlag() {
-		return flag;
-	}
-	
-	public int getIndex() {
-		return index;
-	}
-	
 	public EBuzUnit getUnitById(int id) {
 		for (EBuzUnit unit : EBuzUnit.values()) {
-			if (id == unit.getIndex()) {
+			if (id == unit.index) {
 				return unit;
 			}
 		}
@@ -38,7 +30,7 @@ public enum EBuzUnit {
 	
 	public EBuzUnit getUnitByFlag(String flag) {
 		for (EBuzUnit unit : EBuzUnit.values()) {
-			if (flag.equalsIgnoreCase(unit.getFlag())) {
+			if (flag.equalsIgnoreCase(unit.flag)) {
 				return unit;
 			}
 		}

@@ -1,7 +1,8 @@
 package com.example.buzmodel;
 
-import com.example.buzmodel.view.BuzImageView;
-import com.example.buzmodel.view.BuzTextView;
+import com.example.buzmodel.model.EBuzQuality;
+import com.example.buzmodel.model.EBuzUnit;
+import com.example.buzmodel.model.TBuz;
 import com.example.buzmodel.view.map.lib.CircleShape;
 import com.example.buzmodel.view.map.lib.Shape;
 import com.example.buzmodel.view.map.lib.ShapeExtension.OnShapeActionListener;
@@ -16,62 +17,89 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.util.Random;
+
 public class MainActivity extends Activity {
 
-	BuzTextView mTv;
-	BuzImageView mImg;
-	
+    int node0_id = 0x010;
+    TBuz node0[];
+
 	HighlightImageView mHImg;
+
+    CircleShape node0_shape_c;
+    TextShape node0_shape_t;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		
-//		mTv = (BuzTextView) findViewById(R.id.tv_buz);
-//		mImg = (BuzImageView) findViewById(R.id.img_buz);
 		mHImg = (HighlightImageView) findViewById(R.id.himg_buz);
 		
 		Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.main, new BitmapFactory.Options());
 		mHImg.setImageBitmap(bitmap);
-		
-		CircleShape shape = new CircleShape("Tag", Color.RED);
-		TextShape tShape = new TextShape("tag1", Color.BLACK);
-		
-		shape.setValues(dip2px(getApplicationContext(), 119f),
-				dip2px(getApplicationContext(), 54f),20);
-		tShape.setValues(dip2px(getApplicationContext(), 139f), 
-				dip2px(getApplicationContext(), 44f),
-				dip2px(getApplicationContext(), 184f),
-				dip2px(getApplicationContext(), 54f));
 
-		mHImg.addShape(shape);
-		mHImg.addShape(tShape);
-		mHImg.setOnShapeClickListener(new OnShapeActionListener() {
-			@Override
-			public void onShapeClick(Shape shape, float xOnImage, float yOnImage) {
-				if ("Tag".equals(shape.tag)) {
-					Toast.makeText(getApplicationContext(), "圆形被点击", Toast.LENGTH_SHORT).show();
-				} else if ("tag1".equals(shape.tag)) {
-					Toast.makeText(getApplicationContext(), "矩形被点击", Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
+        setupNodes();
+
+        initShape();
+
 	}
-	
-	 /** 
-     * �����ֻ��ķֱ��ʴ� dp �ĵ�λ ת��Ϊ px(����) 
-     */  
+
+    private void setupNodes() {
+        node0 = new TBuz[10];
+        long timeStamp = System.currentTimeMillis();
+        Random rm = new Random(timeStamp);
+        // initialize the node's data, see it as push test data
+        for (int i = 0; i < 10; i++) {
+            node0[i] = new TBuz();
+            // same node, same id
+            node0[i].setIndex(node0_id);
+            node0[i].setDate(timeStamp++);
+            node0[i].setName("Machine_0");
+            node0[i].setQuality(EBuzQuality.NORMAL);
+            node0[i].setUnit(EBuzUnit.DEGREE);
+            node0[i].setValue(100f + rm.nextInt(50));
+        }
+    }
+
+    private void initShape() {
+        TBuz curNode = node0[0];
+        // one node with two type of shapes
+        // one display the real time status
+        node0_shape_c = new CircleShape(node0_id + 1, curNode.getQuality().color);
+        // one display the real time value
+        node0_shape_t = new TextShape(node0_id, Color.BLACK);
+
+        /*
+        shape's coordinates in the background picture
+        must use the dip value
+         */
+        String[] coords_circle0 = getApplicationContext().getResources().getStringArray(R.array.circle_0);
+        String[] coords_rect0 = getApplicationContext().getResources().getStringArray(R.array.rect_0);
+
+        node0_shape_c.setValues(dip2px(getApplicationContext(), Float.valueOf(coords_circle0[0])),
+                dip2px(getApplicationContext(), Float.valueOf(coords_circle0[1])),15);
+        node0_shape_t.setValues(dip2px(getApplicationContext(), Float.valueOf(coords_rect0[0])),
+                dip2px(getApplicationContext(), Float.valueOf(coords_rect0[1])),
+                dip2px(getApplicationContext(), Float.valueOf(coords_rect0[2])),
+                dip2px(getApplicationContext(), Float.valueOf(coords_rect0[3])));
+        node0_shape_t.setText(String.valueOf(curNode.getValue()), curNode.getUnit().flag);
+        // add shapes to the flow picture
+        mHImg.addShape(node0_shape_c);
+        mHImg.addShape(node0_shape_t);
+        // add click listener
+        mHImg.setOnShapeClickListener(new OnShapeActionListener() {
+            @Override
+            public void onShapeClick(Shape shape, float xOnImage, float yOnImage) {
+                if (node0_id == (Integer)shape.tag) {
+                    Toast.makeText(getApplicationContext(), "进入趋势图", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     public int dip2px(Context context, float dpValue) {  
         final float scale = context.getResources().getDisplayMetrics().density;  
         return (int) (dpValue * scale + 0.5f);  
-    }  
-  
-    /** 
-     * �����ֻ��ķֱ��ʴ� px(����) �ĵ�λ ת��Ϊ dp 
-     */  
-    public int px2dip(Context context, float pxValue) {  
-        final float scale = context.getResources().getDisplayMetrics().density;  
-        return (int) (pxValue / scale + 0.5f);  
-    } 
+    }
 }

@@ -14,7 +14,7 @@ import com.example.buzmodel.view.map.lib.Shape;
 import com.example.buzmodel.view.map.lib.ShapeExtension;
 
 /**
- * HighlightImageView基于TouchImageView的功能，在ImageView的Canvas上绘制一些形状�??
+ * HighlightImageView基于TouchImageView的功能，在ImageView的Canvas上绘制一些形状�??
  * Based on TouchImageView class, Design for draw shapes on canvas of ImageView
  */
 public class HighlightImageView extends TouchImageView implements ShapeExtension {
@@ -38,6 +38,7 @@ public class HighlightImageView extends TouchImageView implements ShapeExtension
 	public void addShape(Shape shape){
 
 		shapesCache.put(shape.tag, shape);
+        shape.setContainer(this);
 		postInvalidate();
 	}
 
@@ -69,7 +70,7 @@ public class HighlightImageView extends TouchImageView implements ShapeExtension
 	}
 
     /**
-     * 如果继承HighlightImageView，并�?要在Canvas上绘制，可以Override这个方法来实现�??
+     * 如果继承HighlightImageView，并�?要在Canvas上绘制，可以Override这个方法来实现�??
 	 * - Override this method for draw something on canvas when YourClass extends HighlightImageView.
      * @param canvas 画布
      */
@@ -80,10 +81,10 @@ public class HighlightImageView extends TouchImageView implements ShapeExtension
         if(onShapeClickListener == null) return;
         for(Shape shape : shapesCache.values()){
             if(shape.inArea(xOnView,yOnView)){
-                // 如果�?个形状被点击，�?�过监听接口回调给点击事件的关注者�??
+                // 如果�?个形状被点击，�?�过监听接口回调给点击事件的关注者�??
 				// Callback by listener when a shape has been clicked
                 onShapeClickListener.onShapeClick(shape, xOnView, yOnView);
-                break; // 只有�?个形状可以被点击 - Only one shape can be click
+                break; // 只有�?个形状可以被点击 - Only one shape can be click
             }
         }
     }
