@@ -1,5 +1,7 @@
 package com.example.buzmodel;
 
+import com.example.buzmodel.grid.lib.IGridChart;
+import com.example.buzmodel.grid.view.TemperatureChart;
 import com.example.buzmodel.model.EBuzQuality;
 import com.example.buzmodel.model.EBuzUnit;
 import com.example.buzmodel.model.TBuz;
@@ -11,6 +13,7 @@ import com.example.buzmodel.view.map.view.HighlightImageView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -29,6 +32,8 @@ public class MainActivity extends Activity {
     CircleShape node0_shape_c;
     TextShape node0_shape_t;
 	
+    IGridChart chart;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,9 +48,14 @@ public class MainActivity extends Activity {
 
         initShape();
 
+        initChart();
 	}
 
-    private void setupNodes() {
+    private void initChart() {
+    	chart = new TemperatureChart();
+	}
+
+	private void setupNodes() {
         node0 = new TBuz[10];
         long timeStamp = System.currentTimeMillis();
         Random rm = new Random(timeStamp);
@@ -93,6 +103,8 @@ public class MainActivity extends Activity {
             public void onShapeClick(Shape shape, float xOnImage, float yOnImage) {
                 if (node0_id == (Integer)shape.tag) {
                     Toast.makeText(getApplicationContext(), "进入趋势图", Toast.LENGTH_SHORT).show();
+                    Intent intent = chart.initDataSet(MainActivity.this, node0);
+                    MainActivity.this.startActivity(intent);
                 }
             }
         });
