@@ -19,6 +19,11 @@ public abstract class AbsGridChart implements IGridChart {
 	protected double[] xValues;
 	protected double[] yValues;
 	
+	private double minXValue = Double.MAX_VALUE;
+	private double maxXValue = Double.MIN_VALUE;
+	private double minYValue = Double.MAX_VALUE;
+	private double maxYValue = Double.MIN_VALUE;
+	
 	public AbsGridChart() {
 		renderer = buildRenderer(new int[]{pColor}, new PointStyle[]{pStyle});
 		((XYSeriesRenderer) renderer.getSeriesRendererAt(0)).setFillPoints(true);
@@ -31,13 +36,6 @@ public abstract class AbsGridChart implements IGridChart {
 		renderer.setChartTitle(getName());
 	    renderer.setXTitle(getXName());
 	    renderer.setYTitle(getYName());
-	    // 应放到数据集初始化和数据更新方法里，动态更新
-//	    renderer.setXAxisMin(xMin);
-//	    renderer.setXAxisMax(xMax);
-//	    renderer.setYAxisMin(yMin);
-//	    renderer.setYAxisMax(yMax);
-//	    renderer.setPanLimits(new double[] { -10, 20, -10, 40 });
-//	    renderer.setZoomLimits(new double[] { -10, 20, -10, 40 });
 	    renderer.setAxesColor(aColor);
 	    renderer.setLabelsColor(lColor);
 	    renderer.setXLabels(12);
@@ -92,6 +90,41 @@ public abstract class AbsGridChart implements IGridChart {
 		  final int size = xValue.length;
 		  for (int i = 0; i < size; i++) {
 			  series.add(xValue[i], yValue[i]);
+			  boolean isLimitUpdated = false;
+			  if (xValue[i] > maxXValue) {
+				  maxXValue = xValue[i];
+				  isLimitUpdated = true;
+			  }
+			  if (xValue[i] < minXValue) {
+				  minXValue = xValue[i];
+				  isLimitUpdated = true;
+			  }
+			  if (yValue[i] > maxYValue) {
+				  maxYValue = yValue[i];
+				  isLimitUpdated = true;
+			  }
+			  if (yValue[i] < minYValue) {
+				  minYValue = yValue[i];
+				  isLimitUpdated = true;
+			  }
+			  if (isLimitUpdated) {
+				  // limit update change the pan and zoom limit
+				  updateLimites();
+			  }
 		  }
 	  }
+
+	protected void updateLimites() {
+		renderer.setXAxisMin(minXValue);
+		renderer.setXAxisMax(maxXValue);
+		renderer.setYAxisMin(minYValue);
+		renderer.setYAxisMax(maxYValue);
+		
+		double maxAbsX = Math.abs(minXValue) > Math.abs(maxXValue) 
+				? Math.abs(minXValue) : Math.abs(maxXValue);
+		double maxAbsY = Math.abs(minYValue) > Math.abs(maxYValue)
+				? Math.abs(minYValue) : Math.abs(maxYValue);
+		renderer.setPanLimits(new double[] {-maxAbsX, maxAbsX, -maxAbsY, maxAbsY});
+		renderer.setZoomLimits(new double[] {-maxAbsX, maxAbsX, -maxAbsY, maxAbsY});
+	}
 }
