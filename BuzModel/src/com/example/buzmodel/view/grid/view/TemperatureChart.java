@@ -1,4 +1,4 @@
-package com.example.buzmodel.grid.view;
+package com.example.buzmodel.view.grid.view;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.achartengine.ChartFactory;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.buzmodel.grid.lib.AbsGridChart;
 import com.example.buzmodel.model.TBuz;
+import com.example.buzmodel.view.grid.lib.AbsGridChart;
 
 public class TemperatureChart extends AbsGridChart {
 

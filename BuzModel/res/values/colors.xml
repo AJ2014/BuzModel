@@ -6,4 +6,6 @@
     <color name="ring_error">#FF0000</color>
     <color name="rect_bg">#000000</color>
     <color name="rect_stroke">#FFFFFF</color>
+    <color name="alpha_zero">#00000000</color>
+    <drawable name="color_transpalent">#00000000</drawable>
 </resources>

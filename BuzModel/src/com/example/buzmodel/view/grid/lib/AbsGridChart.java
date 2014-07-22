@@ -1,4 +1,4 @@
-package com.example.buzmodel.grid.lib;
+package com.example.buzmodel.view.grid.lib;
 
 import org.achartengine.chart.PointStyle;
 import org.achartengine.model.XYMultipleSeriesDataset;
@@ -31,18 +31,19 @@ public abstract class AbsGridChart implements IGridChart {
 		renderer.setChartTitle(getName());
 	    renderer.setXTitle(getXName());
 	    renderer.setYTitle(getYName());
+	    // 应放到数据集初始化和数据更新方法里，动态更新
 //	    renderer.setXAxisMin(xMin);
 //	    renderer.setXAxisMax(xMax);
 //	    renderer.setYAxisMin(yMin);
 //	    renderer.setYAxisMax(yMax);
+//	    renderer.setPanLimits(new double[] { -10, 20, -10, 40 });
+//	    renderer.setZoomLimits(new double[] { -10, 20, -10, 40 });
 	    renderer.setAxesColor(aColor);
 	    renderer.setLabelsColor(lColor);
 	    renderer.setXLabels(12);
 	    renderer.setYLabels(10);
 	    renderer.setXLabelsAlign(Align.RIGHT);
 	    renderer.setYLabelsAlign(Align.RIGHT);
-	    renderer.setPanLimits(new double[] { -10, 20, -10, 40 });
-	    renderer.setZoomLimits(new double[] { -10, 20, -10, 40 });
 	}
 
 

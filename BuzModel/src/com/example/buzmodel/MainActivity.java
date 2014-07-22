@@ -1,10 +1,10 @@
 package com.example.buzmodel;
 
-import com.example.buzmodel.grid.lib.IGridChart;
-import com.example.buzmodel.grid.view.TemperatureChart;
 import com.example.buzmodel.model.EBuzQuality;
 import com.example.buzmodel.model.EBuzUnit;
 import com.example.buzmodel.model.TBuz;
+import com.example.buzmodel.view.grid.lib.IGridChart;
+import com.example.buzmodel.view.grid.view.TemperatureChart;
 import com.example.buzmodel.view.map.lib.CircleShape;
 import com.example.buzmodel.view.map.lib.Shape;
 import com.example.buzmodel.view.map.lib.ShapeExtension.OnShapeActionListener;
@@ -87,12 +87,12 @@ public class MainActivity extends Activity {
         String[] coords_circle0 = getApplicationContext().getResources().getStringArray(R.array.circle_0);
         String[] coords_rect0 = getApplicationContext().getResources().getStringArray(R.array.rect_0);
 
-        node0_shape_c.setValues(dip2px(getApplicationContext(), Float.valueOf(coords_circle0[0])),
-                dip2px(getApplicationContext(), Float.valueOf(coords_circle0[1])),15);
-        node0_shape_t.setValues(dip2px(getApplicationContext(), Float.valueOf(coords_rect0[0])),
-                dip2px(getApplicationContext(), Float.valueOf(coords_rect0[1])),
-                dip2px(getApplicationContext(), Float.valueOf(coords_rect0[2])),
-                dip2px(getApplicationContext(), Float.valueOf(coords_rect0[3])));
+        node0_shape_c.setValues(Utils.dip2px(getApplicationContext(), Float.valueOf(coords_circle0[0])),
+        		Utils.dip2px(getApplicationContext(), Float.valueOf(coords_circle0[1])),15);
+        node0_shape_t.setValues(Utils.dip2px(getApplicationContext(), Float.valueOf(coords_rect0[0])),
+        		Utils.dip2px(getApplicationContext(), Float.valueOf(coords_rect0[1])),
+        		Utils.dip2px(getApplicationContext(), Float.valueOf(coords_rect0[2])),
+        		Utils.dip2px(getApplicationContext(), Float.valueOf(coords_rect0[3])));
         node0_shape_t.setText(String.valueOf(curNode.getValue()), curNode.getUnit().flag);
         // add shapes to the flow picture
         mHImg.addShape(node0_shape_c);
@@ -110,8 +110,4 @@ public class MainActivity extends Activity {
         });
     }
 
-    public int dip2px(Context context, float dpValue) {  
-        final float scale = context.getResources().getDisplayMetrics().density;  
-        return (int) (dpValue * scale + 0.5f);  
-    }
 }

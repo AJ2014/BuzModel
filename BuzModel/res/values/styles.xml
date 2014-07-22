@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AnimationStyleDialogPopwindow_frombottom">
+        <item name="android:windowEnterAnimation">@anim/translate_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/translate_out_from_bottom</item>
+    </style>
+
+    <style name="AnimationStyleDialogPopwindow_fromtop">
+        <item name="android:windowEnterAnimation">@anim/translate_in_from_top</item>
+        <item name="android:windowExitAnimation">@anim/translate_out_from_top</item>
+    </style>
+
+    <style name="DialogPopwindowStyle" parent="android:style/Theme.Dialog">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+    
+    <style name="DialogNoTitleStyleTranslucentBg" parent="android:style/Theme.Dialog"> 
+       	<item name="android:windowIsTranslucent">true</item>
+       	<item name="android:windowNoTitle">true</item>
+       	<item name="android:windowFrame">@null</item>
+       	<item name="android:windowBackground">@color/alpha_zero</item>
+        <item name="android:windowIsFloating">true</item>
+ 	</style>
+
+</resources>

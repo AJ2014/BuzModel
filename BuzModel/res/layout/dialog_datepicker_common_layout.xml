@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="269.33dip"
+    android:layout_height="wrap_content"
+    android:background="@drawable/alert_bg"
+    android:orientation="vertical" >
+
+    <!-- Title -->
+
+    <TextView
+        android:id="@+id/dialog_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21.33dip"
+    	android:paddingLeft="22dip"
+    	android:paddingRight="22dip"
+    	android:gravity="center_horizontal"
+    	android:textSize="16dip"
+    	android:text=""
+    	android:textColor="#000000"
+        android:visibility="visible" />
+    <!-- content -->
+
+    <DatePicker
+        android:id="@+id/myDatePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="22dip"
+    	android:paddingRight="22dip"
+    	android:layout_marginTop="10.67dip"
+    	android:layout_marginBottom="19.33dip" />
+    <!-- button pannel -->
+
+    <LinearLayout
+        android:id="@+id/btn_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+</LinearLayout>

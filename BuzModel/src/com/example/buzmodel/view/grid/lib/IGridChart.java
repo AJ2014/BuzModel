@@ -1,4 +1,4 @@
-package com.example.buzmodel.grid.lib;
+package com.example.buzmodel.view.grid.lib;
 
 import java.util.List;
 
