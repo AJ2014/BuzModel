@@ -16,6 +16,9 @@ public abstract class AbsGridChart implements IGridChart {
 	protected XYMultipleSeriesRenderer renderer;
 	protected XYMultipleSeriesDataset dataset;
 	
+	protected static int MARGIN_RANGE_X = 10;
+	protected static int MARGIN_RANGE_Y = 10;
+	
 	protected double[] xValues;
 	protected double[] yValues;
 	
@@ -88,9 +91,9 @@ public abstract class AbsGridChart implements IGridChart {
 	  
 	  protected void addXYPairs(XYSeries series, double[] xValue, double[] yValue) {
 		  final int size = xValue.length;
+		  boolean isLimitUpdated = false;
 		  for (int i = 0; i < size; i++) {
 			  series.add(xValue[i], yValue[i]);
-			  boolean isLimitUpdated = false;
 			  if (xValue[i] > maxXValue) {
 				  maxXValue = xValue[i];
 				  isLimitUpdated = true;
@@ -107,24 +110,32 @@ public abstract class AbsGridChart implements IGridChart {
 				  minYValue = yValue[i];
 				  isLimitUpdated = true;
 			  }
-			  if (isLimitUpdated) {
-				  // limit update change the pan and zoom limit
-				  updateLimites();
-			  }
+		  }
+		  if (isLimitUpdated) {
+			  // limit update change the pan and zoom limit
+			  updateLimites(series);
 		  }
 	  }
 
-	protected void updateLimites() {
+	protected void updateLimites(XYSeries series) {
+		final int itemCount = series.getItemCount();
+		MARGIN_RANGE_X = (int) ((maxXValue - minXValue) / itemCount);
+		MARGIN_RANGE_Y = (int) ((maxYValue - minYValue) / itemCount);
+		
+		MARGIN_RANGE_X = MARGIN_RANGE_X < 1 ? 1 : MARGIN_RANGE_X;
+		MARGIN_RANGE_Y = MARGIN_RANGE_Y < 1 ? 1 : MARGIN_RANGE_Y;
+		
 		renderer.setXAxisMin(minXValue);
 		renderer.setXAxisMax(maxXValue);
 		renderer.setYAxisMin(minYValue);
 		renderer.setYAxisMax(maxYValue);
 		
-		double maxAbsX = Math.abs(minXValue) > Math.abs(maxXValue) 
-				? Math.abs(minXValue) : Math.abs(maxXValue);
-		double maxAbsY = Math.abs(minYValue) > Math.abs(maxYValue)
-				? Math.abs(minYValue) : Math.abs(maxYValue);
-		renderer.setPanLimits(new double[] {-maxAbsX, maxAbsX, -maxAbsY, maxAbsY});
-		renderer.setZoomLimits(new double[] {-maxAbsX, maxAbsX, -maxAbsY, maxAbsY});
+		double lx = minXValue - MARGIN_RANGE_X;
+		double mx = maxXValue + MARGIN_RANGE_X;
+		double ly = minYValue - MARGIN_RANGE_Y;
+		double my = maxYValue + MARGIN_RANGE_Y;
+		
+		renderer.setPanLimits(new double[] {lx, mx, ly, my});
+		renderer.setZoomLimits(new double[] {lx, mx, ly, my});
 	}
 }
