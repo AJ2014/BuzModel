@@ -27,6 +27,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer;
 import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
 import org.achartengine.util.MathHelper;
 
+import com.example.buzmodel.model.TBuz;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -40,6 +42,7 @@ import android.graphics.RectF;
  * An abstract class to be implemented by the chart rendering classes.
  */
 public abstract class AbstractChart implements Serializable {
+	
   /**
    * The graphical representation of the chart.
    * 
@@ -218,7 +221,7 @@ public abstract class AbstractChart implements Serializable {
     return text;
   }
 
-  private static float[] calculateDrawPoints(float p1x, float p1y, float p2x, float p2y,
+  protected static float[] calculateDrawPoints(float p1x, float p1y, float p2x, float p2y,
       int screenHeight, int screenWidth) {
     float drawP1x;
     float drawP1y;

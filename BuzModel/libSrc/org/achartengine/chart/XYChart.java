@@ -36,6 +36,8 @@ import org.achartengine.renderer.XYMultipleSeriesRenderer.Orientation;
 import org.achartengine.renderer.XYSeriesRenderer;
 import org.achartengine.util.MathHelper;
 
+import com.example.buzmodel.model.TBuz;
+
 import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;

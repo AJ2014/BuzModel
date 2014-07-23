@@ -2,13 +2,13 @@ package com.example.buzmodel.view.grid.view;
 
 import java.util.List;
 
-import org.achartengine.ChartFactory;
-
 import android.content.Context;
 import android.content.Intent;
 
 import com.example.buzmodel.model.TBuz;
 import com.example.buzmodel.view.grid.lib.AbsGridChart;
+import com.example.buzmodel.view.grid.lib.GridChartException;
+import com.example.buzmodel.view.grid.lib.GridChartException.ExceptionCode;
 
 public class TemperatureChart extends AbsGridChart {
 
@@ -46,27 +46,10 @@ public class TemperatureChart extends AbsGridChart {
 			xValues[i] = nodei.getDate();
 			yValues[i] = nodei.getValue();
 		}
-		dataset = buildDataset(getName(), xValues, yValues);
-		Intent intent = ChartFactory.getLineChartIntent(context, dataset, renderer,
-		        "Average temperature");
+		mDataset = buildDataset(getName(), xValues, yValues);
+		setDatasetRenderer(mDataset, mRenderer);
+		Intent intent = ChartFactory.getGridChartIntent(context, this, getName());
 		return intent;
-	}
-
-	@Override
-	public void addDataSet(List<TBuz> data) {
-		if (null == data || data.isEmpty()) {
-			// TODO initial empty chart
-			return;
-		}
-		final int dSize = data.size();
-		double[] xValues = new double[dSize];
-		double[] yValues = new double[dSize];
-		for (int i = 0; i < dSize; i++) {
-			TBuz nodei = data.get(i);
-			xValues[i] = nodei.getDate();
-			yValues[i] = nodei.getValue();
-		}
-		addXYPairs(dataset.getSeriesAt(0), xValues, yValues);
 	}
 
 	@Override
@@ -83,9 +66,9 @@ public class TemperatureChart extends AbsGridChart {
 			xValues[i] = nodei.getDate();
 			yValues[i] = nodei.getValue();
 		}
-		dataset = buildDataset(getName(), xValues, yValues);
-		Intent intent = ChartFactory.getLineChartIntent(context, dataset, renderer,
-		        "Average temperature");
+		mDataset = buildDataset(getName(), xValues, yValues);
+		setDatasetRenderer(mDataset, mRenderer);
+		Intent intent = ChartFactory.getGridChartIntent(context, this, getName());
 		return intent;
 	}
 
@@ -103,7 +86,54 @@ public class TemperatureChart extends AbsGridChart {
 			xValues[i] = nodei.getDate();
 			yValues[i] = nodei.getValue();
 		}
-		addXYPairs(dataset.getSeriesAt(0), xValues, yValues);
+		addXYPairs(mDataset.getSeriesAt(0), xValues, yValues);
+	}
+	
+	@Override
+	public void addDataSet(List<TBuz> data) throws GridChartException {
+		if (null == data || data.isEmpty()) {
+			// TODO initial empty chart
+			return;
+		}
+		final int dSize = data.size();
+		double[] xValues = new double[dSize];
+		double[] yValues = new double[dSize];
+		
+		double minXValue = Double.MAX_VALUE;
+		double minYValue = Double.MAX_VALUE;
+		double maxXValue = Double.MIN_VALUE;
+		double maxYValue = Double.MIN_VALUE;
+		
+		for (int i = 0; i < dSize; i++) {
+			TBuz nodei = data.get(i);
+			xValues[i] = nodei.getDate();
+			yValues[i] = nodei.getValue();
+			if (xValues[i] > maxXValue) {
+				maxXValue = xValues[i];
+			}
+			if (xValues[i] < minXValue) {
+				minXValue = xValues[i];
+			}
+			if (yValues[i] > maxYValue) {
+				maxYValue = yValues[i];
+			}
+			if (yValues[i] < minYValue) {
+				minYValue = yValues[i];
+			}
+		}
+		
+		if (minXValue < this.maxXValue) {
+			throw new GridChartException(ExceptionCode.ERROR_INVALID_DATA_SET);
+		}
+		
+//		if (minXValue > this.maxXValue + mMaxClearRange 
+//				|| maxXValue < this.minXValue - mMaxClearRange
+//				|| minYValue > this.maxYValue + mMaxClearRange
+//				|| maxYValue < this.minYValue - mMaxClearRange) {
+//			clearDataset();
+//		}
+		
+		addXYPairs(mDataset.getSeriesAt(0), xValues, yValues);
 	}
 
 }

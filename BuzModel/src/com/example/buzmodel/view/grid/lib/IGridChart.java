@@ -48,7 +48,9 @@ public interface IGridChart {
 	   * 
 	   * @param data the data to be added
 	   */
-	  void addDataSet(List<TBuz> data);
-	  void addDataSet(TBuz[] data);
+	  void addDataSet(List<TBuz> data) throws GridChartException;
+	  void addDataSet(TBuz[] data) throws GridChartException;
+	  
+	  void clearDataset();
 	  
 }

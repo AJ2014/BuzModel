@@ -40,7 +40,7 @@ public class LineChart extends XYChart {
   /** The scatter chart to be used to draw the data points. */
   private ScatterChart pointsChart;
 
-  LineChart() {
+  public LineChart() {
   }
 
   /**

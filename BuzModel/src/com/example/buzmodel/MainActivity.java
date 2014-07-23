@@ -1,7 +1,5 @@
 package com.example.buzmodel;
 
-import com.example.buzmodel.model.EBuzQuality;
-import com.example.buzmodel.model.EBuzUnit;
 import com.example.buzmodel.model.TBuz;
 import com.example.buzmodel.view.grid.lib.IGridChart;
 import com.example.buzmodel.view.grid.view.TemperatureChart;
@@ -10,17 +8,13 @@ import com.example.buzmodel.view.map.lib.Shape;
 import com.example.buzmodel.view.map.lib.ShapeExtension.OnShapeActionListener;
 import com.example.buzmodel.view.map.lib.TextShape;
 import com.example.buzmodel.view.map.view.HighlightImageView;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
-
-import java.util.Random;
 
 public class MainActivity extends Activity {
 
@@ -56,20 +50,20 @@ public class MainActivity extends Activity {
 	}
 
 	private void setupNodes() {
-        node0 = new TBuz[10];
-        long timeStamp = System.currentTimeMillis();
-        Random rm = new Random(timeStamp);
-        // initialize the node's data, see it as push test data
-        for (int i = 0; i < 10; i++) {
-            node0[i] = new TBuz();
-            // same node, same id
-            node0[i].setIndex(node0_id);
-            node0[i].setDate(timeStamp++);
-            node0[i].setName("Machine_0");
-            node0[i].setQuality(EBuzQuality.NORMAL);
-            node0[i].setUnit(EBuzUnit.DEGREE);
-            node0[i].setValue(100f + rm.nextInt(50));
-        }
+        node0 = Utils.getRandomDataArray(10, node0_id, "Machine_0");
+//        long timeStamp = System.currentTimeMillis();
+//        Random rm = new Random(timeStamp);
+//        // initialize the node's data, see it as push test data
+//        for (int i = 0; i < 10; i++) {
+//            node0[i] = new TBuz();
+//            // same node, same id
+//            node0[i].setIndex(node0_id);
+//            node0[i].setDate(timeStamp++);
+//            node0[i].setName("Machine_0");
+//            node0[i].setQuality(EBuzQuality.NORMAL);
+//            node0[i].setUnit(EBuzUnit.DEGREE);
+//            node0[i].setValue(100f + rm.nextInt(50));
+//        }
     }
 
     private void initShape() {
@@ -104,6 +98,7 @@ public class MainActivity extends Activity {
                 if (node0_id == (Integer)shape.tag) {
                     Toast.makeText(getApplicationContext(), "进入趋势图", Toast.LENGTH_SHORT).show();
                     Intent intent = chart.initDataSet(MainActivity.this, node0);
+                    intent.putExtra(ChartActivity.TAG_START_MODE, ChartActivity.MODE_DYNAMIC);
                     MainActivity.this.startActivity(intent);
                 }
             }
