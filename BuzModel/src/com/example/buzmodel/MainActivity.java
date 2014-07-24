@@ -1,5 +1,7 @@
 package com.example.buzmodel;
 
+import java.util.ArrayList;
+
 import com.example.buzmodel.model.TBuz;
 import com.example.buzmodel.view.grid.lib.IGridChart;
 import com.example.buzmodel.view.grid.view.TemperatureChart;
@@ -8,6 +10,7 @@ import com.example.buzmodel.view.map.lib.Shape;
 import com.example.buzmodel.view.map.lib.ShapeExtension.OnShapeActionListener;
 import com.example.buzmodel.view.map.lib.TextShape;
 import com.example.buzmodel.view.map.view.HighlightImageView;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -97,7 +100,7 @@ public class MainActivity extends Activity {
             public void onShapeClick(Shape shape, float xOnImage, float yOnImage) {
                 if (node0_id == (Integer)shape.tag) {
                     Toast.makeText(getApplicationContext(), "进入趋势图", Toast.LENGTH_SHORT).show();
-                    Intent intent = chart.initDataSet(MainActivity.this, node0);
+                    Intent intent = chart.initDataSet(MainActivity.this, new ArrayList<TBuz>());//node0);
                     intent.putExtra(ChartActivity.TAG_START_MODE, ChartActivity.MODE_DYNAMIC);
                     MainActivity.this.startActivity(intent);
                 }

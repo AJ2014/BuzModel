@@ -220,7 +220,7 @@ public abstract class AbstractChart implements Serializable {
     }
     return text;
   }
-
+  
   protected static float[] calculateDrawPoints(float p1x, float p1y, float p2x, float p2y,
       int screenHeight, int screenWidth) {
     float drawP1x;

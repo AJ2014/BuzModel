@@ -1,6 +1,8 @@
 package com.example.buzmodel;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.achartengine.ChartFactory;
 import org.achartengine.GraphicalView;
@@ -16,6 +18,7 @@ import com.example.buzmodel.view.grid.lib.GridChartException;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -124,7 +127,8 @@ public class ChartActivity extends Activity {
 			private void dealWithDynamicMenu(int position) {
 				switch (position) {
 				case 0:
-					testInsertNewNode();
+					pushing = true;
+					mHandler.postDelayed(mTestPusher, 1000l);
 					break;
 				case 1:
 					if (null == mDatePicker) {
@@ -145,6 +149,7 @@ public class ChartActivity extends Activity {
 					}
 					break;
 				case 2:
+					pushing = false;
 				default:
 					break;
 				}
@@ -174,4 +179,15 @@ public class ChartActivity extends Activity {
 			// 重绘
 			mView.repaint();
 		}
+		private boolean pushing = false;
+		private Handler mHandler = new Handler();
+		private Runnable mTestPusher = new Runnable() {
+			@Override
+			public void run() {
+				testInsertNewNode();
+				if (pushing) {
+					mHandler.postDelayed(this, 1000l);
+				}
+			}
+		};
 }

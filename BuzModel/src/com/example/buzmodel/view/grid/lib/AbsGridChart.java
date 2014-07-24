@@ -26,9 +26,6 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 	protected static double mMinClearRange = 1000;
 	protected static double mMaxClearRange = 5000;
 	
-	protected double[] xValues;
-	protected double[] yValues;
-	
 	protected double minXValue = Double.MAX_VALUE;
 	protected double maxXValue = Double.MIN_VALUE;
 	protected double minYValue = Double.MAX_VALUE;
@@ -97,31 +94,35 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 	  }
 	  
 	  protected void addXYPairs(XYSeries series, double[] xValue, double[] yValue) {
+		  if (null == xValue || xValue.length == 0
+				  || null == yValue || yValue.length == 0) {
+			  return;
+		  }
 		  final int size = xValue.length;
-		  boolean isLimitUpdated = false;
+//		  boolean isLimitUpdated = false;
 		  for (int i = 0; i < size; i++) {
 			  series.add(xValue[i], yValue[i]);
-			  if (xValue[i] > maxXValue) {
-				  maxXValue = xValue[i];
-				  isLimitUpdated = true;
-			  }
-			  if (xValue[i] < minXValue) {
-				  minXValue = xValue[i];
-				  isLimitUpdated = true;
-			  }
-			  if (yValue[i] > maxYValue) {
-				  maxYValue = yValue[i];
-				  isLimitUpdated = true;
-			  }
-			  if (yValue[i] < minYValue) {
-				  minYValue = yValue[i];
-				  isLimitUpdated = true;
-			  }
+//			  if (xValue[i] > maxXValue) {
+//				  maxXValue = xValue[i];
+//				  isLimitUpdated = true;
+//			  }
+//			  if (xValue[i] < minXValue) {
+//				  minXValue = xValue[i];
+//				  isLimitUpdated = true;
+//			  }
+//			  if (yValue[i] > maxYValue) {
+//				  maxYValue = yValue[i];
+//				  isLimitUpdated = true;
+//			  }
+//			  if (yValue[i] < minYValue) {
+//				  minYValue = yValue[i];
+//				  isLimitUpdated = true;
+//			  }
 		  }
-		  if (isLimitUpdated) {
+//		  if (isLimitUpdated) {
 			  // limit update change the pan and zoom limit
 			  updateLimites(series);
-		  }
+//		  }
 	  }
 
 	protected void updateLimites(XYSeries series) {
@@ -132,15 +133,20 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 		MARGIN_RANGE_X = MARGIN_RANGE_X < 1 ? 1 : MARGIN_RANGE_X;
 		MARGIN_RANGE_Y = MARGIN_RANGE_Y < 1 ? 1 : MARGIN_RANGE_Y;
 		
-		mRenderer.setXAxisMin(minXValue);
-		mRenderer.setXAxisMax(maxXValue);
-		mRenderer.setYAxisMin(minYValue);
-		mRenderer.setYAxisMax(maxYValue);
 		
-		double lx = minXValue - MARGIN_RANGE_X;
-		double mx = maxXValue + MARGIN_RANGE_X;
-		double ly = minYValue - MARGIN_RANGE_Y;
-		double my = maxYValue + MARGIN_RANGE_Y;
+		final int count = series.getItemCount();
+		if (count > 5) {
+			series.remove(series.getIndexForKey(series.getMinX()));
+		}
+		mRenderer.setXAxisMin(series.getMinX());
+		mRenderer.setXAxisMax(series.getMaxX());
+		mRenderer.setYAxisMin(series.getMinY());
+		mRenderer.setYAxisMax(series.getMaxY());
+		
+		double lx = series.getMinX() - MARGIN_RANGE_X;
+		double mx = series.getMaxX() + MARGIN_RANGE_X;
+		double ly = series.getMinY() - MARGIN_RANGE_Y;
+		double my = series.getMaxY() + MARGIN_RANGE_Y;
 		
 		mRenderer.setPanLimits(new double[] {lx, mx, ly, my});
 		mRenderer.setZoomLimits(new double[] {lx, mx, ly, my});
@@ -157,48 +163,4 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 		mDataset.getSeriesAt(0).clear();
 	}
 	
-//	@Override
-//	protected void drawPath(Canvas canvas, List<Float> points, Paint paint,
-//			boolean circular) {
-//	    Path path = new Path();
-//	    int height = canvas.getHeight();
-//	    int width = canvas.getWidth();
-//
-//	    float[] tempDrawPoints;
-//	    if (points.size() < 4) {
-//	      return;
-//	    }
-//	    tempDrawPoints = calculateDrawPoints(points.get(0), points.get(1), points.get(2),
-//	        points.get(3), height, width);
-//	    path.moveTo(tempDrawPoints[0], tempDrawPoints[1]);
-//	    if ((tempDrawPoints[2] - tempDrawPoints[0]) <= mMaxClearRange) {
-//	    	path.lineTo(tempDrawPoints[2], tempDrawPoints[3]);
-//	    } else {
-//	    	path.moveTo(tempDrawPoints[2], tempDrawPoints[3]);
-//	    }
-//
-//	    int length = points.size();
-//	    for (int i = 4; i < length; i += 2) {
-//	      if ((points.get(i - 1) < 0 && points.get(i + 1) < 0)
-//	          || (points.get(i - 1) > height && points.get(i + 1) > height)) {
-//	        continue;
-//	      }
-//	      tempDrawPoints = calculateDrawPoints(points.get(i - 2), points.get(i - 1), points.get(i),
-//	          points.get(i + 1), height, width);
-//	      if (!circular) {
-//	        path.moveTo(tempDrawPoints[0], tempDrawPoints[1]);
-//	      }
-//	      if ((tempDrawPoints[2] - tempDrawPoints[0]) <= mMaxClearRange) {
-//		    	path.lineTo(tempDrawPoints[2], tempDrawPoints[3]);
-//		    } else {
-//		    	canvas.drawPath(path, paint);
-//		    	path = new Path();
-//		    	path.moveTo(tempDrawPoints[2], tempDrawPoints[3]);
-//		    }
-//	    }
-//	    if (circular) {
-//	      path.lineTo(points.get(0), points.get(1));
-//	    }
-//	    canvas.drawPath(path, paint);
-//	  }
 }

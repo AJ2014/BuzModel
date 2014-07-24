@@ -49,6 +49,7 @@ import android.graphics.PathEffect;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.test.RenamingDelegatingContext;
 
 /**
  * The XY chart rendering class.
@@ -689,7 +690,7 @@ public abstract class XYChart extends AbstractChart {
       if (showLabels) {
         paint.setColor(mRenderer.getXLabelsColor());
         canvas.drawLine(xLabel, bottom, xLabel, bottom + mRenderer.getLabelsTextSize() / 3, paint);
-        drawText(canvas, getLabel(mRenderer.getLabelFormat(), label), xLabel,
+        drawText(canvas, getXLabel(label), xLabel,
             bottom + mRenderer.getLabelsTextSize() * 4 / 3 + mRenderer.getXLabelsPadding(), paint,
             mRenderer.getXLabelsAngle());
       }
@@ -734,13 +735,13 @@ public abstract class XYChart extends AbstractChart {
             paint.setColor(mRenderer.getYLabelsColor(i));
             if (axisAlign == Align.LEFT) {
               canvas.drawLine(left + getLabelLinePos(axisAlign), yLabel, left, yLabel, paint);
-              drawText(canvas, getLabel(mRenderer.getLabelFormat(), label),
+              drawText(canvas, getYLabel(label),
                   left - mRenderer.getYLabelsPadding(),
                   yLabel - mRenderer.getYLabelsVerticalPadding(), paint,
                   mRenderer.getYLabelsAngle());
             } else {
               canvas.drawLine(right, yLabel, right + getLabelLinePos(axisAlign), yLabel, paint);
-              drawText(canvas, getLabel(mRenderer.getLabelFormat(), label),
+              drawText(canvas, getYLabel(label),
                   right + mRenderer.getYLabelsPadding(),
                   yLabel - mRenderer.getYLabelsVerticalPadding(), paint,
                   mRenderer.getYLabelsAngle());
@@ -754,7 +755,7 @@ public abstract class XYChart extends AbstractChart {
           if (showLabels && !textLabel) {
             paint.setColor(mRenderer.getYLabelsColor(i));
             canvas.drawLine(right - getLabelLinePos(axisAlign), yLabel, right, yLabel, paint);
-            drawText(canvas, getLabel(mRenderer.getLabelFormat(), label),
+            drawText(canvas, getYLabel(label),
                 right + 10 + mRenderer.getYLabelsPadding(),
                 yLabel - mRenderer.getYLabelsVerticalPadding(), paint, mRenderer.getYLabelsAngle());
           }
@@ -981,5 +982,13 @@ public abstract class XYChart extends AbstractChart {
    * @return the chart type
    */
   public abstract String getChartType();
+  
+  public String getXLabel(double value) {
+	  return getLabel(mRenderer.getLabelFormat(), value);
+  }
+  
+  public String getYLabel(double value) {
+	  return getLabel(mRenderer.getLabelFormat(), value);
+  }
 
 }
