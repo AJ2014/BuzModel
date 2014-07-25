@@ -353,4 +353,14 @@ public class XYSeries implements Serializable {
   public double getMaxY() {
     return mMaxY;
   }
+  
+  /**
+  * Removes the first value from the series.
+  * Useful for sliding, real time graphs where a standard remove takes up too much time.
+  * It assumes data is sorted on the key value (X component).
+  */
+	public synchronized void removeFirst() {
+		mXY.removeByIndex(0);
+		mMinX = mXY.getXByIndex(0);
+	}
 }

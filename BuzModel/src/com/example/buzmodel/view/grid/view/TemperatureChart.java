@@ -104,39 +104,39 @@ public class TemperatureChart extends AbsGridChart {
 		double[] xValues = new double[dSize];
 		double[] yValues = new double[dSize];
 		
-		double minXValue = Double.MAX_VALUE;
-		double minYValue = Double.MAX_VALUE;
-		double maxXValue = Double.MIN_VALUE;
-		double maxYValue = Double.MIN_VALUE;
+//		double minXValue = Double.MAX_VALUE;
+//		double minYValue = Double.MAX_VALUE;
+//		double maxXValue = Double.MIN_VALUE;
+//		double maxYValue = Double.MIN_VALUE;
 		
 		for (int i = 0; i < dSize; i++) {
 			TBuz nodei = data.get(i);
 			xValues[i] = nodei.getDate();
 			yValues[i] = nodei.getValue();
-			if (xValues[i] > maxXValue) {
-				maxXValue = xValues[i];
-			}
-			if (xValues[i] < minXValue) {
-				minXValue = xValues[i];
-			}
-			if (yValues[i] > maxYValue) {
-				maxYValue = yValues[i];
-			}
-			if (yValues[i] < minYValue) {
-				minYValue = yValues[i];
-			}
+//			if (xValues[i] > maxXValue) {
+//				maxXValue = xValues[i];
+//			}
+//			if (xValues[i] < minXValue) {
+//				minXValue = xValues[i];
+//			}
+//			if (yValues[i] > maxYValue) {
+//				maxYValue = yValues[i];
+//			}
+//			if (yValues[i] < minYValue) {
+//				minYValue = yValues[i];
+//			}
 		}
 		
-		if (minXValue < this.maxXValue) {// 新数据x轴值比老数据还小
-			throw new GridChartException(ExceptionCode.ERROR_INVALID_DATA_SET);
-		}
-		
-		if (minXValue > this.maxXValue + mMaxClearRange 
-				|| maxXValue < this.minXValue - mMaxClearRange
-				|| minYValue > this.maxYValue + mMaxClearRange
-				|| maxYValue < this.minYValue - mMaxClearRange) {
-			clearDataset();
-		}
+//		if (minXValue < this.maxXValue) {// 新数据x轴值比老数据还小
+//			throw new GridChartException(ExceptionCode.ERROR_INVALID_DATA_SET);
+//		}
+//		
+//		if (minXValue > this.maxXValue + mMaxClearRange 
+//				|| maxXValue < this.minXValue - mMaxClearRange
+//				|| minYValue > this.maxYValue + mMaxClearRange
+//				|| maxYValue < this.minYValue - mMaxClearRange) {
+//			clearDataset();
+//		}
 		
 		addXYPairs(mDataset.getSeriesAt(0), xValues, yValues);
 	}
