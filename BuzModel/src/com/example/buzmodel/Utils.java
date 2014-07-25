@@ -1,5 +1,10 @@
 package com.example.buzmodel;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,12 +14,19 @@ import com.example.buzmodel.model.EBuzUnit;
 import com.example.buzmodel.model.TBuz;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.MediaScannerConnectionClient;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images;
+import android.provider.MediaStore.MediaColumns;
 import android.text.format.DateFormat;
 
 public class Utils {
@@ -65,8 +77,9 @@ public class Utils {
 	
 	private static final Uri STORAGE_URI = Images.Media.EXTERNAL_CONTENT_URI;
 	private static final String IMAGE_MIME_TYPE = "image/png";
+	private static MediaScannerConnection msc;
 	
-	public static String saveBitmap2DCIMFolder(ContentResolver cr, Bitmap source, String title, String description) {
+	public static String saveBitmap2DCIMFolder(Context context, Bitmap source, String title, String description) {
 		
 
 //		ContentValues values = new ContentValues(7);
@@ -81,7 +94,130 @@ public class Utils {
 //		   
 //		Uri dataUri = cr.insert(STORAGE_URI, values);
 		
-		return MediaStore.Images.Media.insertImage(cr, source, title, description);
+		final String uri = MediaStore.Images.Media.insertImage(context.getContentResolver(), source, title, description);
+		return getFilePathByContentResolver(context, Uri.parse(uri));
+	}
+	
+	/** 
+     * Insert an image and create a thumbnail for it. 
+     * 
+     * @param cr The content resolver to use 
+     * @param imagePath The path to the image to insert 
+     * @param name The name of the image 
+     * @param description The description of the image 
+     * @return The URL to the newly created image 
+     * @throws FileNotFoundException 
+     */  
+	public static final String insertImage(ContentResolver cr,
+			String imagePath, String name, String description)
+			throws FileNotFoundException {
+		// Check if file exists with a FileInputStream
+		FileInputStream stream = new FileInputStream(imagePath);
+		try {
+			Bitmap bm = BitmapFactory.decodeFile(imagePath);
+			String ret = insertImage(cr, bm, name, description);
+			bm.recycle();
+			return ret;
+		} finally {
+			try {
+				stream.close();
+			} catch (IOException e) {
+			}
+		}
+	}
+	
+	/** 
+     * Insert an image and create a thumbnail for it. 
+     * 
+     * @param cr The content resolver to use 
+     * @param source The stream to use for the image 
+     * @param title The name of the image 
+     * @param description The description of the image 
+     * @return The URL to the newly created image, or <code>null</code> if the image failed to be stored 
+     *              for any reason. 
+     */  
+	public static final String insertImage(ContentResolver cr, Bitmap source,
+			String title, String description) {
+		ContentValues values = new ContentValues();
+		values.put(Images.Media.TITLE, title);
+		values.put(Images.Media.DESCRIPTION, description);
+		values.put(Images.Media.MIME_TYPE, "image/jpeg");
+
+		Uri url = null;
+		String stringUrl = null; /* value to be returned */
+
+		try {
+			url = cr.insert(STORAGE_URI, values);
+
+			if (source != null) {
+				OutputStream imageOut = cr.openOutputStream(url);
+				try {
+					source.compress(Bitmap.CompressFormat.JPEG, 50, imageOut);
+				} finally {
+					imageOut.close();
+				}
+			}
+		} catch (Exception e) {
+			if (url != null) {
+				cr.delete(url, null, null);
+				url = null;
+			}
+		}
+
+		if (url != null) {
+			stringUrl = url.toString();
+		}
+
+		return stringUrl;
+	}
+	
+	/**
+	 * 根据Uri获取文件路径
+	 * @param context
+	 * @param uri
+	 * @return
+	 */
+	public static String getFilePathByContentResolver(Context context, Uri uri) {
+		if (null == uri) {
+			return null;
+		}
+		Cursor c = context.getContentResolver().query(uri, null, null, null, null);
+		String filePath = null;
+		if (null == c) {
+			throw new IllegalArgumentException("Query on " + uri
+					+ " returns null result.");
+		}
+		try {
+			if ((c.getCount() != 1) || !c.moveToFirst()) {
+			} else {
+				filePath = c.getString(c.getColumnIndexOrThrow(MediaColumns.DATA));
+			}
+		} finally {
+			c.close();
+		}
+		return filePath;
+	}
+	
+	private void funcToNotifyImgAdded(Context context, Uri uri) {
+		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		intent.setData(uri);
+		context.sendBroadcast(intent);
+	}
+	
+	private void funcToNotifyImgAdded2(Context context, final String path) {
+		msc = new MediaScannerConnection(context, new MediaScannerConnectionClient() {
+			
+			@Override
+			public void onScanCompleted(String path, Uri uri) {
+				msc.disconnect();
+			}
+			
+			@Override
+			public void onMediaScannerConnected() {
+				msc.scanFile(path, IMAGE_MIME_TYPE);
+			}
+		});
+		msc.connect();
 	}
 
 }

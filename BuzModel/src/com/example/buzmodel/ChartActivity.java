@@ -121,7 +121,7 @@ public class ChartActivity extends Activity {
 				switch (position) {
 				case 0:
 					// TODO 保存bitmap到本地图片
-					String uri = Utils.saveBitmap2DCIMFolder(ChartActivity.this.getContentResolver(), 
+					String uri = Utils.saveBitmap2DCIMFolder(ChartActivity.this.getApplicationContext(), 
 							mView.toBitmap(), String.valueOf(System.currentTimeMillis()), "description for chart.");
 					Toast.makeText(ChartActivity.this, "图片被保存到:\n" + uri, Toast.LENGTH_SHORT).show();
 					break;
