@@ -1,5 +1,6 @@
 package com.example.buzmodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -14,9 +15,13 @@ import com.example.buzmodel.view.MyCommonDialogMaker.DialogCallBack;
 import com.example.buzmodel.view.MyCommonPopWindow.CommonBottomUpPopWondowCallBack;
 import com.example.buzmodel.view.grid.lib.AbsGridChart;
 import com.example.buzmodel.view.grid.lib.GridChartException;
+import com.example.buzmodel.view.grid.lib.IGridChart;
+import com.example.buzmodel.view.grid.view.TemperatureChart;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.database.CharArrayBuffer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -116,6 +121,9 @@ public class ChartActivity extends Activity {
 				switch (position) {
 				case 0:
 					// TODO 保存bitmap到本地图片
+					String uri = Utils.saveBitmap2DCIMFolder(ChartActivity.this.getContentResolver(), 
+							mView.toBitmap(), String.valueOf(System.currentTimeMillis()), "description for chart.");
+					Toast.makeText(ChartActivity.this, "图片被保存到:\n" + uri, Toast.LENGTH_SHORT).show();
 					break;
 				case 1:
 					break;
@@ -127,8 +135,10 @@ public class ChartActivity extends Activity {
 			private void dealWithDynamicMenu(int position) {
 				switch (position) {
 				case 0:
-					pushing = true;
-					mHandler.postDelayed(mTestPusher, 1000l);
+					if (!pushing) {
+						pushing = true;
+						mHandler.postDelayed(mTestPusher, 1000l);
+					}
 					break;
 				case 1:
 					if (null == mDatePicker) {
@@ -161,7 +171,10 @@ public class ChartActivity extends Activity {
 		 * 模拟测试查询数据
 		 */
 		private void testQuery() {
-			
+			IGridChart chart = new TemperatureChart();
+			Intent intent = chart.initDataSet(ChartActivity.this, Utils.getRandomDataList(10, MODE_STATIC, "Test_1"));
+            intent.putExtra(ChartActivity.TAG_START_MODE, ChartActivity.MODE_STATIC);
+            ChartActivity.this.startActivity(intent);
 		}
 		
 		/**
