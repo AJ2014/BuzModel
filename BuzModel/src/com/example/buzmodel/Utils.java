@@ -31,6 +31,12 @@ import android.text.format.DateFormat;
 
 public class Utils {
 	
+	private static final Uri STORAGE_URI = Images.Media.EXTERNAL_CONTENT_URI;
+	private static final String IMAGE_MIME_TYPE = "image/png";
+	private static MediaScannerConnection msc;
+	
+	private static final long DEFAULT_PUSH_TIME = 1000;
+	
 	public static int dip2px(Context context, float dpValue) {  
         final float scale = context.getResources().getDisplayMetrics().density;  
         return (int) (dpValue * scale + 0.5f);  
@@ -46,11 +52,12 @@ public class Utils {
             node0[i] = new TBuz();
             // same node, same id
             node0[i].setIndex(index);
-            node0[i].setDate(timeStamp++);
+            node0[i].setDate(timeStamp);
             node0[i].setName(name);
             node0[i].setQuality(EBuzQuality.NORMAL);
             node0[i].setUnit(EBuzUnit.DEGREE);
             node0[i].setValue(100f + rm.nextInt(50));
+            timeStamp += DEFAULT_PUSH_TIME;
         }
         return node0;
 	}
@@ -75,24 +82,7 @@ public class Utils {
 		return nodes;
 	}
 	
-	private static final Uri STORAGE_URI = Images.Media.EXTERNAL_CONTENT_URI;
-	private static final String IMAGE_MIME_TYPE = "image/png";
-	private static MediaScannerConnection msc;
-	
 	public static String saveBitmap2DCIMFolder(Context context, Bitmap source, String title, String description) {
-		
-
-//		ContentValues values = new ContentValues(7);
-//
-//		values.put(Images.Media.TITLE, title);
-//		values.put(Images.Media.DISPLAY_NAME, title);
-//		values.put(Images.Media.DATE_TAKEN, dateTaken);
-//		values.put(Images.Media.MIME_TYPE, IMAGE_MIME_TYPE);
-//		values.put(Images.Media.ORIENTATION, degree[0]);
-//		values.put(Images.Media.DATA, filePath);
-//		values.put(Images.Media.SIZE, size);
-//		   
-//		Uri dataUri = cr.insert(STORAGE_URI, values);
 		
 		final String uri = MediaStore.Images.Media.insertImage(context.getContentResolver(), source, title, description);
 		return getFilePathByContentResolver(context, Uri.parse(uri));

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.example.buzmodel.model.TBuz;
 import com.example.buzmodel.view.grid.lib.IGridChart;
-import com.example.buzmodel.view.grid.view.TemperatureChart;
+import com.example.buzmodel.view.grid.view.TimeChart;
 import com.example.buzmodel.view.map.lib.CircleShape;
 import com.example.buzmodel.view.map.lib.Shape;
 import com.example.buzmodel.view.map.lib.ShapeExtension.OnShapeActionListener;
@@ -49,24 +49,11 @@ public class MainActivity extends Activity {
 	}
 
     private void initChart() {
-    	chart = new TemperatureChart();
+    	chart = new TimeChart();
 	}
 
 	private void setupNodes() {
         node0 = Utils.getRandomDataArray(10, node0_id, "Machine_0");
-//        long timeStamp = System.currentTimeMillis();
-//        Random rm = new Random(timeStamp);
-//        // initialize the node's data, see it as push test data
-//        for (int i = 0; i < 10; i++) {
-//            node0[i] = new TBuz();
-//            // same node, same id
-//            node0[i].setIndex(node0_id);
-//            node0[i].setDate(timeStamp++);
-//            node0[i].setName("Machine_0");
-//            node0[i].setQuality(EBuzQuality.NORMAL);
-//            node0[i].setUnit(EBuzUnit.DEGREE);
-//            node0[i].setValue(100f + rm.nextInt(50));
-//        }
     }
 
     private void initShape() {
@@ -100,7 +87,7 @@ public class MainActivity extends Activity {
             public void onShapeClick(Shape shape, float xOnImage, float yOnImage) {
                 if (node0_id == (Integer)shape.tag) {
                     Toast.makeText(getApplicationContext(), "进入趋势图", Toast.LENGTH_SHORT).show();
-                    Intent intent = chart.initDataSet(MainActivity.this, new ArrayList<TBuz>());//node0);
+                    Intent intent = chart.initDataSet(MainActivity.this, new ArrayList<TBuz>());
                     intent.putExtra(ChartActivity.TAG_START_MODE, ChartActivity.MODE_DYNAMIC);
                     MainActivity.this.startActivity(intent);
                 }

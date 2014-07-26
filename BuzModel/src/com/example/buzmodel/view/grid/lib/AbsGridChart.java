@@ -32,8 +32,8 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 	private static final int MAX_VISIBLE_COUNT = 30;
 
 	public AbsGridChart() {
-		mRenderer = buildRenderer(new int[] { pColor },
-				new PointStyle[] { pStyle });
+		mRenderer = buildRenderer(new int[] { pColor, Color.TRANSPARENT },
+				new PointStyle[] { pStyle, PointStyle.X });
 		((XYSeriesRenderer) mRenderer.getSeriesRendererAt(0))
 				.setFillPoints(true);
 
@@ -95,11 +95,11 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 	protected void addXYSeries(XYMultipleSeriesDataset dataset, String title,
 			double[] xValue, double[] yValue) {
 		XYSeries series = new XYSeries(title);
-		addXYPairs(series, xValue, yValue);
+		addXYPairs(series, xValue, yValue, true);
 		dataset.addSeries(series);
 	}
-
-	protected void addXYPairs(XYSeries series, double[] xValue, double[] yValue) {
+	
+	public void addXYPairs(XYSeries series, double[] xValue, double[] yValue) {
 		if (null == xValue || xValue.length == 0 || null == yValue
 				|| yValue.length == 0) {
 			return;
@@ -110,10 +110,64 @@ public abstract class AbsGridChart extends LineChart implements IGridChart {
 		}
 		updateLimites(series);
 	}
+	
+	/**
+	 * 添加新值到指定series里
+	 * @param series
+	 * @param xValue
+	 * @param yValue
+	 * @param updatelimites 是否需要更新renderer, true renderer完整更新{range,pan,zoom}, 
+	 * 		  false renderer 只更新x轴对应的limites
+	 */
+	public void addXYPairs(XYSeries series, double[] xValue, double[] yValue, boolean updatelimites) {
+		if (null == xValue || xValue.length == 0 || null == yValue
+				|| yValue.length == 0) {
+			return;
+		}
+		final int size = xValue.length;
+		for (int i = 0; i < size; i++) {
+			series.add(xValue[i], yValue[i]);
+		}
+		if (updatelimites) {
+			updateLimites(series);
+		} else {
+			updateXLimites(series);
+		}
+	}
+
+	private void updateXLimites(XYSeries series) {
+		final int itemCount = series.getItemCount();
+		if (itemCount == 0) {
+			return;
+		}
+		if (itemCount > MAX_VISIBLE_COUNT) {
+			// remove the minit x item;
+			series.removeFirst();
+		}
+		double maxX = series.getMaxX();
+		double minX = maxX - RENDER_RANGE_COUNT;
+		mRenderer.setXAxisMax(maxX);
+		mRenderer.setXAxisMin(minX);
+		
+		MARGIN_RANGE_X = (int) ((series.getMaxX() - series.getMinX()) / itemCount);
+		MARGIN_RANGE_X = MARGIN_RANGE_X < 1 ? 1 : MARGIN_RANGE_X;
+		
+		double lx = series.getMinX() - MARGIN_RANGE_X;
+		double mx = series.getMaxX() + MARGIN_RANGE_X;
+		
+		double[] panLimits = mRenderer.getPanLimits();
+		double[] zoomLimits = mRenderer.getZoomLimits();
+		panLimits[0] = lx; panLimits[1] = mx;
+		zoomLimits[0]= lx; zoomLimits[1]= mx;
+		mRenderer.setPanLimits(panLimits);
+		mRenderer.setZoomLimits(zoomLimits);
+	}
 
 	protected void updateLimites(XYSeries series) {
 		final int itemCount = series.getItemCount();
-
+		if (itemCount == 0) {
+			return;
+		}
 		if (itemCount > MAX_VISIBLE_COUNT) {
 			// remove the minit x item;
 			series.removeFirst();

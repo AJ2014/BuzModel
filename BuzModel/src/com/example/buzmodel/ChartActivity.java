@@ -16,7 +16,7 @@ import com.example.buzmodel.view.MyCommonPopWindow.CommonBottomUpPopWondowCallBa
 import com.example.buzmodel.view.grid.lib.AbsGridChart;
 import com.example.buzmodel.view.grid.lib.GridChartException;
 import com.example.buzmodel.view.grid.lib.IGridChart;
-import com.example.buzmodel.view.grid.view.TemperatureChart;
+import com.example.buzmodel.view.grid.view.TimeChart;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -44,7 +44,7 @@ public class ChartActivity extends Activity {
 	  public static final int MODE_STATIC  = 0X002;
 	  public int mStartMode = MODE_DYNAMIC;
 	  
-	  private static final String[] FUNC_TITLE_DYNAMIC = {"插入新数据", "查询","取消"};
+	  private static final String[] FUNC_TITLE_DYNAMIC = {"插入新数据", "查询","停止插入新数据"};//, "开启时间线"};
 	  private static final String[] FUNC_TITLE_STATIC = {"保存到图片","取消"};
 	  private static final String[] PICKER_TITLE = {"确认","取消"};
 
@@ -63,6 +63,19 @@ public class ChartActivity extends Activity {
 	    }
 	    setContentView(mView);
 	  }
+	  
+	  @Override
+	protected void onResume() {
+		super.onResume();
+		((TimeChart)mChart).startTimer(mHandler, mView);
+	}
+	  
+	  
+	  @Override
+	protected void onDestroy() {
+		super.onDestroy();
+		((TimeChart)mChart).stopTimer();
+	}
 	  
 	  @Override
 		public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -116,62 +129,66 @@ public class ChartActivity extends Activity {
 					break;
 				}
 			}
-
-			private void dealWithStaticMenu(int position) {
-				switch (position) {
-				case 0:
-					// TODO 保存bitmap到本地图片
-					String uri = Utils.saveBitmap2DCIMFolder(ChartActivity.this.getApplicationContext(), 
-							mView.toBitmap(), String.valueOf(System.currentTimeMillis()), "description for chart.");
-					Toast.makeText(ChartActivity.this, "图片被保存到:\n" + uri, Toast.LENGTH_SHORT).show();
-					break;
-				case 1:
-					break;
-				default:
-					break;
-				}
-			}
-
-			private void dealWithDynamicMenu(int position) {
-				switch (position) {
-				case 0:
-					if (!pushing) {
-						pushing = true;
-						mHandler.postDelayed(mTestPusher, 1000l);
-					}
-					break;
-				case 1:
-					if (null == mDatePicker) {
-						mDatePicker = MyCommonDialogMaker.showDatePickerDialog(
-								ChartActivity.this, "请选择时间段", "2014-07-01", PICKER_TITLE, new DialogCallBack() {
-									@Override
-									public void onCancelDialog(Dialog dialog, Object tag) {
-										
-									}
-									@Override
-									public void onButtonClicked(Dialog dialog, int position, Object tag) {
-										testQuery();
-									}
-									
-								}, true);
-					} else if (!mDatePicker.isShowing()) {
-						mDatePicker.show();
-					}
-					break;
-				case 2:
-					pushing = false;
-				default:
-					break;
-				}
-			}
 			
 		};
+		
+		private void dealWithStaticMenu(int position) {
+			switch (position) {
+			case 0:
+				// TODO 保存bitmap到本地图片
+				String uri = Utils.saveBitmap2DCIMFolder(ChartActivity.this.getApplicationContext(), 
+						mView.toBitmap(), String.valueOf(System.currentTimeMillis()), "description for chart.");
+				Toast.makeText(ChartActivity.this, "图片被保存到:\n" + uri, Toast.LENGTH_SHORT).show();
+				break;
+			case 1:
+				break;
+			default:
+				break;
+			}
+		}
+		
+		private void dealWithDynamicMenu(int position) {
+			switch (position) {
+			case 0:
+				if (!pushing) {
+					pushing = true;
+					mHandler.postDelayed(mTestPusher, 1000l);
+				}
+				break;
+			case 1:
+				if (null == mDatePicker) {
+					mDatePicker = MyCommonDialogMaker.showDatePickerDialog(
+							ChartActivity.this, "请选择时间段", "2014-07-01", PICKER_TITLE, new DialogCallBack() {
+								@Override
+								public void onCancelDialog(Dialog dialog, Object tag) {
+									
+								}
+								@Override
+								public void onButtonClicked(Dialog dialog, int position, Object tag) {
+									testQuery();
+								}
+								
+							}, true);
+				} else if (!mDatePicker.isShowing()) {
+					mDatePicker.show();
+				}
+				break;
+			case 2:
+				pushing = false;
+				break;
+			case 3:
+				((TimeChart)mChart).startTimer(mHandler, mView);
+				break;
+			default:
+				break;
+			}
+		}
 
 		/**
 		 * 模拟测试查询数据
 		 */
 		private void testQuery() {
-			IGridChart chart = new TemperatureChart();
+			IGridChart chart = new TimeChart();
 			Intent intent = chart.initDataSet(ChartActivity.this, Utils.getRandomDataList(10, MODE_STATIC, "Test_1"));
             intent.putExtra(ChartActivity.TAG_START_MODE, ChartActivity.MODE_STATIC);
             ChartActivity.this.startActivity(intent);
